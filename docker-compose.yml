@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  skin-scan:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=your-secret-key-here
+    volumes:
+      - ./instance:/app/instance
+    restart: unless-stopped
+

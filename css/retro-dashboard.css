@@ -1,0 +1,710 @@
+/* Retro Dashboard CSS - Classic Retro Style */
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Orbitron:wght@400;700&display=swap');
+
+/* Performance optimizations */
+* {
+    box-sizing: border-box;
+}
+
+/* Paper texture background */
+body {
+    background: #f5f5f0;
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(255,255,255,0.2) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    font-family: 'Orbitron', monospace;
+    color: #2c2c2c;
+    line-height: 1.6;
+    /* Prevent layout shifts */
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100vh;
+    max-height: 100vh;
+}
+
+/* Retro container styling */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+}
+
+/* Retro navbar */
+.navbar {
+    background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%) !important;
+    border-bottom: 3px solid #ffd700;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.navbar-brand {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.2rem;
+    color: #ffd700 !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    letter-spacing: 2px;
+}
+
+.navbar-nav .nav-link {
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    color: #ffffff !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffd700 !important;
+    border-bottom-color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* Retro header styling */
+.admin-header {
+    background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+    color: #ffffff;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border: 3px solid #ffd700;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(255,215,0,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,215,0,0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.admin-header h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2rem;
+    color: #ffd700;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+    margin-bottom: 0.5rem;
+    letter-spacing: 3px;
+}
+
+.admin-header p {
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    color: #ffffff;
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+/* Dashboard title */
+.dashboard-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2.5rem;
+    color: #2c2c2c;
+    text-align: center;
+    margin-bottom: 2rem;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+    letter-spacing: 4px;
+    position: relative;
+}
+
+.dashboard-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #ffd700, transparent);
+    border-radius: 2px;
+}
+
+/* Retro stats cards */
+.stats-card {
+    background: #ffffff;
+    border: 3px solid #2c2c2c;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 
+        0 8px 25px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ffd700, #ff6b35, #ffd700);
+}
+
+.stats-card:hover {
+    box-shadow: 
+        0 15px 35px rgba(0,0,0,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.stats-card h3 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2.5rem;
+    color: #2c2c2c;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.stats-card p {
+    font-family: 'VT323', monospace;
+    font-size: 1.3rem;
+    color: #666;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Retro table styling */
+.table-container {
+    background: #ffffff;
+    border: 3px solid #2c2c2c;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 
+        0 8px 25px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    position: relative;
+}
+
+.table-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ffd700, #ff6b35, #ffd700);
+}
+
+.table-container h5 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.2rem;
+    color: #2c2c2c;
+    margin-bottom: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    letter-spacing: 2px;
+}
+
+/* Table styling */
+.table {
+    background: transparent;
+}
+
+.table thead th {
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+    color: #ffffff;
+    border: 2px solid #ffd700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    padding: 1rem;
+}
+
+.table tbody td {
+    font-family: 'VT323', monospace;
+    font-size: 1rem;
+    border: 1px solid #e0e0e0;
+    padding: 0.8rem;
+    vertical-align: middle;
+}
+
+.table tbody tr:hover {
+    background: rgba(255, 215, 0, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+/* Retro badges */
+.admin-badge {
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: #ffffff;
+    font-family: 'VT323', monospace;
+    font-size: 0.9rem;
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem;
+    border: 2px solid #2c2c2c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.user-badge {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: #ffffff;
+    font-family: 'VT323', monospace;
+    font-size: 0.9rem;
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem;
+    border: 2px solid #2c2c2c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Retro buttons */
+.btn {
+    font-family: 'VT323', monospace;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 2px solid #2c2c2c;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: #ffffff;
+    border-color: #0056b3;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    color: #2c2c2c;
+    border-color: #e0a800;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #e0a800 0%, #c69500 100%);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: #ffffff;
+    border-color: #c82333;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.btn-sm {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+}
+
+/* Retro navigation tabs */
+.nav-tabs {
+    border-bottom: 3px solid #2c2c2c;
+    margin-bottom: 2rem;
+}
+
+/* Tab content area */
+.tab-content {
+    min-height: 400px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.tab-pane {
+    min-height: 400px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.nav-tabs .nav-link {
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    color: #666;
+    background: #f8f9fa;
+    border: 2px solid #2c2c2c;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    margin-right: 5px;
+    padding: 0.8rem 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    background: #e9ecef;
+    color: #2c2c2c;
+}
+
+.nav-tabs .nav-link.active {
+    background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+    color: #ffd700;
+    border-color: #2c2c2c;
+    border-bottom-color: #2c2c2c;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+/* Retro card styling */
+.card {
+    background: #ffffff;
+    border: 3px solid #2c2c2c;
+    border-radius: 15px;
+    box-shadow: 
+        0 8px 25px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 2px solid #2c2c2c;
+    padding: 1rem 1.5rem;
+}
+
+.card-header h5 {
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    color: #2c2c2c;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Retro prediction cards */
+.prediction-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    background: #ffffff;
+    transition: box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.prediction-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #28a745;
+    transition: all 0.3s ease;
+}
+
+.prediction-card.confidence-medium::before {
+    background: #ffc107;
+}
+
+.prediction-card.confidence-low::before {
+    background: #dc3545;
+}
+
+.prediction-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.prediction-card .card-title {
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    color: #2c2c2c;
+    margin-bottom: 0.5rem;
+}
+
+.prediction-card .card-text {
+    font-family: 'VT323', monospace;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Retro chart container */
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 360px;
+    max-height: 360px;
+    min-height: 360px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 10px;
+    padding: 1rem;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 320px !important;
+    max-height: 320px !important;
+    min-height: 320px !important;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    object-fit: contain;
+}
+
+#disease-legend {
+    margin-top: 1rem;
+    text-align: center;
+    width: 100%;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+#disease-legend .col-auto {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(255,255,255,0.8);
+    border-radius: 8px;
+    border: 2px solid #2c2c2c;
+    flex-shrink: 0;
+}
+
+/* Recent activity container */
+#recent-activity {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Analytics row constraints */
+#analytics-pane .row {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+#analytics-pane .col-md-6 {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Specific chart constraints for analytics */
+#analytics-pane .chart-container {
+    height: 300px;
+    max-height: 300px;
+    min-height: 300px;
+    overflow: hidden;
+    position: relative;
+}
+
+#analytics-pane .chart-container canvas {
+    height: 260px !important;
+    max-height: 260px !important;
+    min-height: 260px !important;
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Prevent chart from expanding */
+#analytics-pane .table-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Additional chart constraints */
+#analytics-pane * {
+    max-height: inherit;
+}
+
+#analytics-pane .chart-container * {
+    max-height: 300px;
+    overflow: hidden;
+}
+
+#recent-activity .d-flex {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+}
+
+/* Retro loading spinner */
+.spinner-border {
+    color: #ffd700;
+    border-width: 3px;
+}
+
+/* Retro responsive design */
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+    }
+    
+    .stats-card {
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .stats-card h3 {
+        font-size: 2rem;
+    }
+    
+    .admin-header h1 {
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+    }
+    
+    .table-container {
+        padding: 1rem;
+    }
+    
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .chart-container {
+        height: 280px;
+        max-height: 280px;
+        min-height: 280px;
+    }
+    
+    .chart-container canvas {
+        height: 240px !important;
+        max-height: 240px !important;
+        min-height: 240px !important;
+    }
+    
+    .container {
+        max-height: calc(100vh - 80px);
+    }
+    
+    .tab-content {
+        max-height: 400px;
+    }
+    
+    .tab-pane {
+        max-height: 400px;
+    }
+}
+
+/* Retro animations */
+@keyframes retroGlow {
+    0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+}
+
+.stats-card:hover {
+    animation: retroGlow 2s infinite;
+}
+
+/* Retro scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+    border-radius: 6px;
+    border: 2px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #ffd700 0%, #ff6b35 100%);
+}
+
+/* User info styling */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: 2rem;
+}
+
+.user-name {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    color: #ffd700 !important;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.user-role {
+    background: linear-gradient(135deg, #8a2be2 0%, #9370db 100%);
+    color: #ffffff !important;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
+}
+
+.logout-btn {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: #ffffff !important;
+    border: 2px solid #ffd700;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 10px rgba(220, 53, 69, 0.3);
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+    color: #ffd700 !important;
+    border-color: #ff6b35;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.5);
+}

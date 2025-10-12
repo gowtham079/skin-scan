@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Skin Scan</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="static/img/rash (1).png" rel="icon">
+  <link href="static/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Retro CSS Files -->
+  <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="css/retro-main.css" rel="stylesheet">
+
+  <script type="text/javascript" src="js/target_classes.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"></script>
+  <script type="text/javascript" src="js/mobile-net.js"></script>
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+      <h1 class="logo"><a href="/">SKIN DISEASE DETECTION</a></h1>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">HOME</a></li>
+          <li><a class="nav-link scrollto" href="#about">ABOUT</a></li>
+          <li><a class="nav-link" href="/dashboard">DASHBOARD</a></li>
+          <li><a class="nav-link" href="/diseases">DISEASE INFO</a></li>
+          <li><a class="nav-link" href="/admin" id="admin-link" style="display:none;">ADMIN PANEL</a></li>
+        </ul>
+        <span id="user-status" class="user-status"></span>
+        <button id="login-btn" class="btn btn-outline-primary btn-sm ms-2" onclick="showAuthModal()">LOGIN / REGISTER</button>
+        <button id="logout-btn" class="btn btn-outline-danger btn-sm ms-2" style="display:none;" onclick="logoutUser()">LOGOUT</button>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Login/Register Modal -->
+  <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="authModalLabel">LOGIN OR REGISTER</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="nav nav-tabs mb-3" id="authTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-pane" type="button" role="tab">LOGIN</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register-pane" type="button" role="tab">REGISTER</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="authTabContent">
+            <div class="tab-pane fade show active" id="login-pane" role="tabpanel">
+              <form id="login-form">
+                <div class="mb-3">
+                  <label for="login-username" class="form-label">Username or Email</label>
+                  <input type="text" class="form-control" id="login-username" required>
+                </div>
+                <div class="mb-3">
+                  <label for="login-password" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+              </form>
+            </div>
+            <div class="tab-pane fade" id="register-pane" role="tabpanel">
+              <form id="register-form">
+                <div class="mb-3">
+                  <label for="register-username" class="form-label">Username</label>
+                  <input type="text" class="form-control" id="register-username" required>
+                </div>
+                <div class="mb-3">
+                  <label for="register-email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="register-email" required>
+                </div>
+                <div class="mb-3">
+                  <label for="register-password" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="register-password" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Register</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center">
+    <div class="container-fluid" data-aos="fade-up">
+      <div class="row justify-content-center">
+        <div class="col-xl-5 col-lg-6 pt-3 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
+          <h1>SKIN DISEASE DETECTION</h1>
+          <h2>THE FUTURE OF SKIN LESION DIAGNOSIS: AI-ENHANCED SKIN SCANNING</h2>
+          <div><a href="#about" class="btn-get-started scrollto">GET STARTED</a></div>
+        </div>
+        <div class="col-xl-4 col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="150">
+          <img src="static/img/hero-img.png" class="img-fluid animated" alt="">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main id="main">
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about">
+      <div class="container">
+        <div class="row">
+            <h3 class="fst-bold" style="color: #2c2c2c; font-size: 2.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 1.5rem;">PREDICT YOUR SKIN HEALTH TODAY</h3>
+            <p class="fst-italic" style="color: #2c2c2c; font-size: 1.3rem; font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); margin-bottom: 2rem;">
+              OUR WEBSITE USES AN AI MODEL TO RECOGNIZE AND CLASSIFY DIFFERENT TYPES OF SKIN LESIONS. BREATHE EASY, WITH SKIN SCAN.
+            </p>
+            <ul>
+              <li><i class="bi bi-check-circle"></i> QUICK</li>
+              <li><i class="bi bi-check-circle"></i> EASY</li>
+              <li><i class="bi bi-check-circle"></i> SIMPLE</li>
+              <li><i class="bi bi-check-circle"></i> IMMEDIATE ADVICE</li>
+            </ul>
+
+          <div class="demo-wrapper mobilenet-demo-container" id="demo-wrapper" style="display:none;">
+              <div class="button-container">
+                <button id="load-button" class="input-button" onclick="loadModel()">LOAD MODEL</button>
+                <label for="select-file-image" class="input-button">UPLOAD IMAGE</label>
+                <input id="select-file-image" type="file" onchange="loadFile(event)" style="display: none" />
+                <button id="predict-button" class="input-button predict-button" onclick="predButton()">PREDICT</button>
+                <div id="progress-box" style="display: none; width: 100% !important">
+                  <img src="assets/loading.gif" id="demo-load" width="100px" />
+                  <p style="color: white">LOADING MOBILENET MODEL..</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="demo-output">
+              <div class="out-box" id="select-file-box" style="display: none">
+                <img id="test-image" height="300px" width="450px" margin="2px" />
+              </div>
+              <div class="out-box" id="predict-box" style="display: none;">
+                <p id="prediction"></p>
+                <br />
+                <p><b style="color: #190f0f !important; font-style: italic; font-weight: 100; font-size: 18px;">TOP-3 PREDICTIONS</b></p>
+                <ul id="predict-list"></ul>
+              </div>
+            </div>
+
+            <div class="chart">
+              <canvas id="chart-box" style="display: none" height="120px"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="static/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="static/vendor/aos/aos.js"></script>
+  <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="static/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="static/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="static/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="static/js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Show/hide demo-wrapper based on login status
+    function updateDemoVisibility(loggedIn) {
+      document.getElementById('demo-wrapper').style.display = loggedIn ? '' : 'none';
+    }
+    // On page load, check user status
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.checkUserStatus) window.checkUserStatus();
+    });
+  </script>
+</body>
+
+</html>

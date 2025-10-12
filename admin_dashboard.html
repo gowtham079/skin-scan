@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Scan - Admin Dashboard</title>
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/retro-dashboard.css" rel="stylesheet">
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">SKIN SCAN ADMIN</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">MAIN APP</a>
+                <a class="nav-link" href="/dashboard">USER DASHBOARD</a>
+                <button class="btn btn-outline-danger btn-sm ms-2" onclick="logoutUser()">LOGOUT</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-header">
+        <div class="container">
+            <h1><i class="bi bi-shield-check"></i> ADMIN DASHBOARD</h1>
+            <p class="mb-0">MANAGE USERS, PREDICTIONS & SYSTEM ANALYTICS</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <h3 id="total-users">0</h3>
+                    <p class="mb-0">TOTAL USERS</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <h3 id="total-predictions">0</h3>
+                    <p class="mb-0">TOTAL PREDICTIONS</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <h3 id="admin-count">0</h3>
+                    <p class="mb-0">ADMIN USERS</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <h3 id="avg-confidence">0%</h3>
+                    <p class="mb-0">AVG CONFIDENCE</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-tabs mb-4" id="adminTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="users-tab" data-bs-toggle="tab" data-bs-target="#users-pane" type="button" role="tab">
+                    <i class="bi bi-people"></i> USERS
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="predictions-tab" data-bs-toggle="tab" data-bs-target="#predictions-pane" type="button" role="tab">
+                    <i class="bi bi-graph-up"></i> PREDICTIONS
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="analytics-tab" data-bs-toggle="tab" data-bs-target="#analytics-pane" type="button" role="tab">
+                    <i class="bi bi-bar-chart"></i> ANALYTICS
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="adminTabContent">
+            <!-- Users Tab -->
+            <div class="tab-pane fade show active" id="users-pane" role="tabpanel">
+                <div class="table-container">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5><i class="bi bi-people"></i> USER MANAGEMENT</h5>
+                        <button class="btn btn-primary btn-sm" onclick="loadUsers()">
+                            <i class="bi bi-arrow-clockwise"></i> REFRESH
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>USERNAME</th>
+                                    <th>EMAIL</th>
+                                    <th>ROLE</th>
+                                    <th>PREDICTIONS</th>
+                                    <th>JOINED</th>
+                                    <th>ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        <div class="spinner-border" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Predictions Tab -->
+            <div class="tab-pane fade" id="predictions-pane" role="tabpanel">
+                <div class="table-container">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5><i class="bi bi-graph-up"></i> PREDICTION MANAGEMENT</h5>
+                        <button class="btn btn-primary btn-sm" onclick="loadPredictions()">
+                            <i class="bi bi-arrow-clockwise"></i> REFRESH
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>USER</th>
+                                    <th>PREDICTION</th>
+                                    <th>CONFIDENCE</th>
+                                    <th>DATE</th>
+                                    <th>ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="predictions-table-body">
+                                <tr>
+                                    <td colspan="6" class="text-center">
+                                        <div class="spinner-border" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="tab-pane fade" id="analytics-pane" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="table-container">
+                            <h5><i class="bi bi-pie-chart"></i> DISEASE DISTRIBUTION</h5>
+                            <canvas id="diseaseChart" width="400" height="300"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="table-container">
+                            <h5><i class="bi bi-calendar"></i> RECENT ACTIVITY</h5>
+                            <div id="recent-activity">
+                                <div class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let diseaseChart;
+
+        // Check if user is admin
+        async function checkAdminAccess() {
+            try {
+                const response = await fetch('/api/user');
+                const data = await response.json();
+                if (!data.logged_in || !data.is_admin) {
+                    alert('Admin access required!');
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error checking admin access:', error);
+                window.location.href = '/';
+            }
+        }
+
+        // Load statistics
+        async function loadStats() {
+            try {
+                const [usersResponse, predictionsResponse, statsResponse] = await Promise.all([
+                    fetch('/api/admin/users'),
+                    fetch('/api/admin/predictions'),
+                    fetch('/api/stats')
+                ]);
+
+                const usersData = await usersResponse.json();
+                const predictionsData = await predictionsResponse.json();
+                const statsData = await statsResponse.json();
+
+                if (usersData.success) {
+                    document.getElementById('total-users').textContent = usersData.users.length;
+                    const adminCount = usersData.users.filter(u => u.is_admin).length;
+                    document.getElementById('admin-count').textContent = adminCount;
+                }
+
+                if (predictionsData.success) {
+                    document.getElementById('total-predictions').textContent = predictionsData.predictions.length;
+                    if (predictionsData.predictions.length > 0) {
+                        const avgConfidence = predictionsData.predictions.reduce((sum, pred) => sum + pred.confidence_score, 0) / predictionsData.predictions.length;
+                        document.getElementById('avg-confidence').textContent = (avgConfidence * 100).toFixed(1) + '%';
+                    }
+                }
+
+                if (statsData.success) {
+                    createDiseaseChart(statsData.stats.class_distribution);
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Load users
+        async function loadUsers() {
+            try {
+                const response = await fetch('/api/admin/users');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const tbody = document.getElementById('users-table-body');
+                    if (data.users.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No users found.</td></tr>';
+                        return;
+                    }
+                    
+                    let html = '';
+                    data.users.forEach((user, index) => {
+                        const roleBadge = user.is_admin ? 
+                            '<span class="admin-badge">Admin</span>' : 
+                            '<span class="user-badge">User</span>';
+                        
+                        html += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${user.username}</td>
+                                <td>${user.email}</td>
+                                <td>${roleBadge}</td>
+                                <td>${user.prediction_count}</td>
+                                <td>${user.created_at}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm" onclick="toggleAdmin(${user.id})">
+                                        ${user.is_admin ? 'REMOVE ADMIN' : 'MAKE ADMIN'}
+                                    </button>
+                                    ${!user.is_admin ? `<button class="btn btn-danger btn-sm ms-1" onclick="deleteUser(${user.id})">DELETE</button>` : ''}
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tbody.innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        // Load predictions
+        async function loadPredictions() {
+            try {
+                const response = await fetch('/api/admin/predictions');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const tbody = document.getElementById('predictions-table-body');
+                    if (data.predictions.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" class="text-center">No predictions found.</td></tr>';
+                        return;
+                    }
+                    
+                    let html = '';
+                    data.predictions.forEach((pred, index) => {
+                        const confidence = (pred.confidence_score * 100).toFixed(1);
+                        html += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${pred.username}</td>
+                                <td>${pred.predicted_class}</td>
+                                <td>${confidence}%</td>
+                                <td>${pred.created_at}</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" onclick="deletePrediction(${pred.id})">DELETE</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tbody.innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Error loading predictions:', error);
+            }
+        }
+
+        // Delete user
+        async function deleteUser(userId) {
+            if (!confirm('Are you sure you want to delete this user? This will also delete all their predictions.')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/admin/users/${userId}`, {
+                    method: 'DELETE'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('User deleted successfully!');
+                    loadUsers();
+                    loadStats();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                alert('Error deleting user');
+            }
+        }
+
+        // Delete prediction
+        async function deletePrediction(predictionId) {
+            if (!confirm('Are you sure you want to delete this prediction?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/admin/predictions/${predictionId}`, {
+                    method: 'DELETE'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Prediction deleted successfully!');
+                    loadPredictions();
+                    loadStats();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error deleting prediction:', error);
+                alert('Error deleting prediction');
+            }
+        }
+
+        // Toggle admin status
+        async function toggleAdmin(userId) {
+            try {
+                const response = await fetch(`/api/admin/users/${userId}/toggle-admin`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(data.message);
+                    loadUsers();
+                    loadStats();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error toggling admin status:', error);
+                alert('Error updating admin status');
+            }
+        }
+
+        // Create disease chart
+        function createDiseaseChart(distribution) {
+            const ctx = document.getElementById('diseaseChart').getContext('2d');
+            
+            if (diseaseChart) {
+                diseaseChart.destroy();
+            }
+            
+            const diseaseNames = {
+                'akiec': 'ACTINIC KERATOSES',
+                'bcc': 'BASAL CELL CARCINOMA',
+                'bkl': 'BENIGN KERATOSIS',
+                'df': 'DERMATOFIBROMA',
+                'mel': 'MELANOMA',
+                'nv': 'MELANOCYTIC NEVI',
+                'vasc': 'VASCULAR LESION'
+            };
+            
+            // Filter out zero values and map to proper names
+            const filteredData = Object.entries(distribution)
+                .filter(([key, value]) => value > 0)
+                .map(([key, value]) => ({
+                    label: diseaseNames[key] || key.toUpperCase(),
+                    value: value,
+                    color: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#28a745'][Object.keys(diseaseNames).indexOf(key) % 7]
+                }));
+            
+            if (filteredData.length === 0) {
+                return;
+            }
+            
+            diseaseChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: filteredData.map(item => item.label),
+                    datasets: [{
+                        data: filteredData.map(item => item.value),
+                        backgroundColor: filteredData.map(item => item.color),
+                        borderWidth: 3,
+                        borderColor: '#2c2c2c'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: 'VT323',
+                                    size: 12
+                                },
+                                color: '#2c2c2c'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#2c2c2c',
+                            titleColor: '#ffd700',
+                            bodyColor: '#ffffff',
+                            borderColor: '#ffd700',
+                            borderWidth: 2
+                        }
+                    }
+                }
+            });
+        }
+
+        // Logout function
+        function logoutUser() {
+            fetch('/api/logout', { method: 'POST' })
+                .then(() => {
+                    window.location.href = '/';
+                });
+        }
+
+        // Load recent activity
+        async function loadRecentActivity() {
+            try {
+                const response = await fetch('/api/admin/predictions');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const recentActivity = document.getElementById('recent-activity');
+                    const recentPredictions = data.predictions.slice(0, 5); // Show last 5
+                    
+                    if (recentPredictions.length === 0) {
+                        recentActivity.innerHTML = '<p class="text-muted">NO RECENT ACTIVITY.</p>';
+                        return;
+                    }
+                    
+                    let html = '';
+                    recentPredictions.forEach(pred => {
+                        const confidence = (pred.confidence_score * 100).toFixed(1);
+                        html += `
+                            <div class="d-flex justify-content-between align-items-center mb-2 p-2 border-bottom">
+                                <div>
+                                    <strong>${pred.username.toUpperCase()}</strong> MADE A PREDICTION
+                                    <br><small class="text-muted">${pred.predicted_class.toUpperCase()}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-primary">${confidence}%</span>
+                                    <br><small class="text-muted">${pred.created_at}</small>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    recentActivity.innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Error loading recent activity:', error);
+                document.getElementById('recent-activity').innerHTML = '<p class="text-danger">ERROR LOADING RECENT ACTIVITY.</p>';
+            }
+        }
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAdminAccess();
+            loadStats();
+            loadUsers();
+            loadPredictions();
+            loadRecentActivity();
+        });
+    </script>
+</body>
+</html> 

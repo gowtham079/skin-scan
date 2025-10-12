@@ -1,0 +1,252 @@
+vimage.png<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Scan - Disease Information</title>
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/retro-main.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">Skin Scan</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">Main App</a>
+                <a class="nav-link" href="/dashboard">Dashboard</a>
+                <a class="nav-link active" href="/diseases">Disease Info</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4 mb-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="section-title text-center mb-4" style="color: #2c2c2c; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                    <i class="bi bi-heart-pulse"></i> SKIN DISEASE INFORMATION GUIDE
+                </h1>
+                <p class="text-center mb-5" style="color: #2c2c2c; font-size: 1.2rem; font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
+                    COMPREHENSIVE INFORMATION ABOUT SKIN CONDITIONS DETECTED BY OUR AI SYSTEM
+                </p>
+            </div>
+        </div>
+
+        <div class="disease-card">
+            <h5 style="color: #2c2c2c; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);"><i class="bi bi-exclamation-triangle"></i> MEDICAL DISCLAIMER</h5>
+            <p class="mb-0" style="color: #2c2c2c; font-weight: 600; font-size: 1.1rem;">
+                THIS INFORMATION IS FOR EDUCATIONAL PURPOSES ONLY AND SHOULD NOT REPLACE PROFESSIONAL MEDICAL ADVICE. 
+                ALWAYS CONSULT WITH A QUALIFIED HEALTHCARE PROVIDER FOR DIAGNOSIS AND TREATMENT.
+            </p>
+        </div>
+
+        <!-- Disease Cards -->
+        <div id="diseases-container">
+            <!-- Disease cards will be loaded here -->
+        </div>
+
+        <!-- General Prevention Tips -->
+        <div class="disease-card">
+                         <h3 style="color: #2c2c2c; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);"><i class="bi bi-shield-check"></i> GENERAL SKIN HEALTH & PREVENTION</h3>
+                         <div class="prevention-tips">
+                 <h5 style="color: #2c2c2c; font-weight: 700; margin-top: 1.5rem;">🌞 SUN PROTECTION</h5>
+                 <ul style="color: #2c2c2c; font-weight: 600;">
+                     <li>USE BROAD-SPECTRUM SUNSCREEN (SPF 30+) DAILY</li>
+                     <li>REAPPLY EVERY 2 HOURS WHEN OUTDOORS</li>
+                     <li>SEEK SHADE DURING PEAK SUN HOURS (10 AM - 4 PM)</li>
+                     <li>WEAR PROTECTIVE CLOTHING, HATS, AND SUNGLASSES</li>
+                 </ul>
+                 
+                 <h5 style="color: #2c2c2c; font-weight: 700; margin-top: 1.5rem;">🔍 REGULAR SKIN CHECKS</h5>
+                 <ul style="color: #2c2c2c; font-weight: 600;">
+                     <li>PERFORM MONTHLY SELF-EXAMINATIONS</li>
+                     <li>USE THE ABCDE RULE FOR MOLE EVALUATION</li>
+                     <li>SCHEDULE ANNUAL PROFESSIONAL SKIN EXAMS</li>
+                     <li>DOCUMENT ANY CHANGES WITH PHOTOS</li>
+                 </ul>
+                 
+                 <h5 style="color: #2c2c2c; font-weight: 700; margin-top: 1.5rem;">💪 HEALTHY LIFESTYLE</h5>
+                 <ul style="color: #2c2c2c; font-weight: 600;">
+                     <li>MAINTAIN A BALANCED DIET RICH IN ANTIOXIDANTS</li>
+                     <li>STAY HYDRATED</li>
+                     <li>AVOID SMOKING AND EXCESSIVE ALCOHOL</li>
+                     <li>MANAGE STRESS LEVELS</li>
+                 </ul>
+             </div>
+        </div>
+
+        <!-- ABCDE Rule -->
+        <div class="disease-card">
+                         <h3 style="color: #2c2c2c; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);"><i class="bi bi-alphabet"></i> ABCDE RULE FOR MELANOMA DETECTION</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <h4 class="text-danger" style="font-weight: 700;">A</h4>
+                                         <strong style="color: #2c2c2c; font-weight: 700;">ASYMMETRY</strong>
+                     <p class="small" style="color: #2c2c2c; font-weight: 600;">ONE HALF DOESN'T MATCH THE OTHER</p>
+                 </div>
+                 <div class="col-md-2">
+                     <h4 class="text-danger" style="font-weight: 700;">B</h4>
+                     <strong style="color: #2c2c2c; font-weight: 700;">BORDER</strong>
+                     <p class="small" style="color: #2c2c2c; font-weight: 600;">IRREGULAR, SCALLOPED, OR POORLY DEFINED</p>
+                 </div>
+                 <div class="col-md-2">
+                     <h4 class="text-danger" style="font-weight: 700;">C</h4>
+                     <strong style="color: #2c2c2c; font-weight: 700;">COLOR</strong>
+                     <p class="small" style="color: #2c2c2c; font-weight: 600;">VARIED SHADES OF BROWN, BLACK, OR TAN</p>
+                 </div>
+                 <div class="col-md-2">
+                     <h4 class="text-danger" style="font-weight: 700;">D</h4>
+                     <strong style="color: #2c2c2c; font-weight: 700;">DIAMETER</strong>
+                     <p class="small" style="color: #2c2c2c; font-weight: 600;">LARGER THAN 6MM (PENCIL ERASER)</p>
+                 </div>
+                 <div class="col-md-2">
+                     <h4 class="text-danger" style="font-weight: 700;">E</h4>
+                     <strong style="color: #2c2c2c; font-weight: 700;">EVOLVING</strong>
+                     <p class="small" style="color: #2c2c2c; font-weight: 600;">CHANGING IN SIZE, SHAPE, OR COLOR</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+                 const DISEASE_INFO = {
+             "akiec": {
+                 name: "ACTINIC KERATOSES (SOLAR KERATOSES)",
+                 cause: "LONG-TERM SUN EXPOSURE, FAIR SKIN, WEAKENED IMMUNE SYSTEM, AGING, OUTDOOR OCCUPATIONS.",
+                 symptoms: "ROUGH, SCALY PATCHES ON SUN-EXPOSED AREAS, PINK OR RED BASE, MAY BE TENDER TO TOUCH.",
+                 cure: "CRYOTHERAPY (FREEZING), TOPICAL MEDICATIONS (5-FU, IMIQUIMOD), PHOTODYNAMIC THERAPY, MINOR SURGERY.",
+                 prevention: "USE SUNSCREEN (SPF 30+), WEAR PROTECTIVE CLOTHING, AVOID PEAK SUN HOURS, REGULAR SKIN CHECKS.",
+                 severity: "PRE-CANCEROUS - CAN DEVELOP INTO SQUAMOUS CELL CARCINOMA IF UNTREATED.",
+                 risk_factors: "FAIR SKIN, BLUE EYES, RED HAIR, OUTDOOR WORK, HISTORY OF SUNBURNS."
+             },
+             "bcc": {
+                 name: "BASAL CELL CARCINOMA",
+                 cause: "LONG-TERM SUN EXPOSURE, FAIR SKIN, RADIATION EXPOSURE, GENETIC PREDISPOSITION, WEAKENED IMMUNE SYSTEM.",
+                 symptoms: "PEARLY BUMP, PINK GROWTH, BLEEDING SORE, SCAR-LIKE AREA, WAXY APPEARANCE.",
+                 cure: "SURGICAL REMOVAL (MOHS SURGERY), TOPICAL TREATMENTS, RADIATION THERAPY, CRYOTHERAPY.",
+                 prevention: "SUN PROTECTION, REGULAR SKIN EXAMINATIONS, AVOID TANNING BEDS, PROTECTIVE CLOTHING.",
+                 severity: "MOST COMMON SKIN CANCER, RARELY SPREADS BUT CAN BE DISFIGURING IF UNTREATED.",
+                 risk_factors: "FAIR SKIN, FAMILY HISTORY, OUTDOOR ACTIVITIES, PREVIOUS RADIATION THERAPY."
+             },
+             "bkl": {
+                 name: "BENIGN KERATOSIS (SEBORRHEIC KERATOSIS)",
+                 cause: "AGING, SUN EXPOSURE, GENETIC FACTORS, HORMONAL CHANGES, FAMILY HISTORY.",
+                 symptoms: "BROWN, BLACK, OR TAN GROWTHS, WAXY OR SCALY TEXTURE, RAISED APPEARANCE, MAY ITCH.",
+                 cure: "USUALLY HARMLESS, CAN BE REMOVED FOR COSMETIC REASONS VIA CRYOTHERAPY, LASER, OR SCRAPING.",
+                 prevention: "SUN PROTECTION, REGULAR SKIN MONITORING, AVOID EXCESSIVE SUN EXPOSURE.",
+                 severity: "BENIGN (NON-CANCEROUS), NO HEALTH RISK BUT MAY BE COSMETICALLY CONCERNING.",
+                 risk_factors: "AGE OVER 40, FAIR SKIN, FAMILY HISTORY, SUN EXPOSURE."
+             },
+             "df": {
+                 name: "DERMATOFIBROMA",
+                 cause: "UNKNOWN, POSSIBLY MINOR SKIN INJURIES, INSECT BITES, TRAUMA, GENETIC FACTORS.",
+                 symptoms: "FIRM, RAISED BUMP, BROWN OR PINK COLOR, MAY ITCH OR BE TENDER, DIMPLES WHEN PRESSED.",
+                 cure: "USUALLY HARMLESS, SURGICAL REMOVAL IF SYMPTOMATIC OR FOR COSMETIC REASONS.",
+                 prevention: "AVOID SKIN TRAUMA, PROTECT FROM INSECT BITES, MAINTAIN SKIN HEALTH.",
+                 severity: "BENIGN (NON-CANCEROUS), NO HEALTH RISK, MAY CAUSE DISCOMFORT.",
+                 risk_factors: "MIDDLE-AGED ADULTS, WOMEN MORE THAN MEN, HISTORY OF SKIN TRAUMA."
+             },
+             "mel": {
+                 name: "MELANOMA",
+                 cause: "UV RADIATION EXPOSURE, GENETIC FACTORS, FAMILY HISTORY, FAIR SKIN, MULTIPLE MOLES.",
+                 symptoms: "ASYMMETRIC MOLE, IRREGULAR BORDERS, MULTIPLE COLORS, DIAMETER >6MM, EVOLVING APPEARANCE.",
+                 cure: "SURGICAL REMOVAL, IMMUNOTHERAPY, TARGETED THERAPY, CHEMOTHERAPY, RADIATION THERAPY.",
+                 prevention: "SUN PROTECTION, REGULAR SKIN CHECKS, AVOID TANNING BEDS, KNOW YOUR SKIN.",
+                 severity: "MOST SERIOUS SKIN CANCER, CAN SPREAD QUICKLY IF NOT CAUGHT EARLY.",
+                 risk_factors: "FAIR SKIN, FAMILY HISTORY, MULTIPLE ATYPICAL MOLES, SEVERE SUNBURNS."
+             },
+             "nv": {
+                 name: "MELANOCYTIC NEVI (MOLES)",
+                 cause: "GENETIC FACTORS, SUN EXPOSURE, HORMONAL CHANGES, FAIR SKIN, FAMILY HISTORY.",
+                 symptoms: "BROWN OR BLACK SPOTS, MAY BE FLAT OR RAISED, USUALLY ROUND OR OVAL, MAY HAVE HAIR.",
+                 cure: "USUALLY HARMLESS, REMOVAL IF SUSPICIOUS CHANGES, MONITORING FOR CHANGES.",
+                 prevention: "SUN PROTECTION, REGULAR SKIN EXAMINATIONS, AVOID EXCESSIVE SUN EXPOSURE.",
+                 severity: "USUALLY BENIGN, BUT SOME MAY DEVELOP INTO MELANOMA.",
+                 risk_factors: "FAIR SKIN, FAMILY HISTORY, EXCESSIVE SUN EXPOSURE, MULTIPLE MOLES."
+             },
+             "vasc": {
+                 name: "VASCULAR LESIONS",
+                 cause: "ABNORMAL BLOOD VESSELS, GENETIC FACTORS, HORMONAL CHANGES, TRAUMA, AGING.",
+                 symptoms: "RED, PURPLE, OR PINK MARKS, MAY BE FLAT OR RAISED, MAY BLANCH WITH PRESSURE.",
+                 cure: "LASER THERAPY, SURGERY, OBSERVATION, MEDICATION IN SOME CASES.",
+                 prevention: "PROTECT FROM TRAUMA, AVOID EXCESSIVE SUN EXPOSURE, REGULAR MONITORING.",
+                 severity: "USUALLY BENIGN, MAY BE COSMETICALLY CONCERNING, RARELY SERIOUS.",
+                 risk_factors: "FAMILY HISTORY, FAIR SKIN, HORMONAL CHANGES, TRAUMA."
+             }
+         };
+
+        function getSeverityClass(severity) {
+            if (severity.includes('cancer')) return 'severity-high';
+            if (severity.includes('Pre-cancerous')) return 'severity-medium';
+            return 'severity-low';
+        }
+
+        function createDiseaseCards() {
+            const container = document.getElementById('diseases-container');
+            let html = '';
+
+            Object.entries(DISEASE_INFO).forEach(([key, disease]) => {
+                const severityClass = getSeverityClass(disease.severity);
+                const severityIcon = disease.severity.includes('cancer') ? '🚨' : 
+                                   disease.severity.includes('Pre-cancerous') ? '⚠️' : '✅';
+
+                html += `
+                    <div class="disease-card ${severityClass}">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h3>${severityIcon} ${disease.name}</h3>
+                            <span class="badge bg-${disease.severity.includes('cancer') ? 'danger' : 
+                                                   disease.severity.includes('Pre-cancerous') ? 'warning' : 'success'}">
+                                                                 ${disease.severity.includes('cancer') ? 'HIGH RISK' : 
+                                   disease.severity.includes('Pre-cancerous') ? 'MEDIUM RISK' : 'LOW RISK'}
+                            </span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                                                 <div class="info-section">
+                                     <h5><i class="bi bi-search"></i> SYMPTOMS</h5>
+                                     <p>${disease.symptoms}</p>
+                                 </div>
+                                 
+                                 <div class="info-section">
+                                     <h5><i class="bi bi-exclamation-triangle"></i> SEVERITY</h5>
+                                     <p>${disease.severity}</p>
+                                 </div>
+                                 
+                                 <div class="info-section">
+                                     <h5><i class="bi bi-target"></i> RISK FACTORS</h5>
+                                     <p>${disease.risk_factors}</p>
+                                 </div>
+                             </div>
+                             
+                             <div class="col-md-6">
+                                 <div class="info-section">
+                                     <h5><i class="bi bi-heart-pulse"></i> TREATMENT</h5>
+                                     <p>${disease.cure}</p>
+                                 </div>
+                                 
+                                 <div class="info-section">
+                                     <h5><i class="bi bi-shield-check"></i> PREVENTION</h5>
+                                     <p>${disease.prevention}</p>
+                                 </div>
+                                 
+                                 <div class="info-section">
+                                     <h5><i class="bi bi-question-circle"></i> CAUSES</h5>
+                                     <p>${disease.cause}</p>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Load disease information when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createDiseaseCards();
+        });
+    </script>
+</body>
+</html> 
