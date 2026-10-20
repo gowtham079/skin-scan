@@ -7,21 +7,36 @@ import os
 import uuid
 import json
 
+from dotenv import load_dotenv
+
+# Load environment variables from .env file if present
+load_dotenv()
+
 app = Flask(__name__)
 
-# Configure SQLite database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///skin_scan.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'your-secret-key-here'
+# Configure database
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    # Render's PostgreSQL URL starts with postgres:// which SQLAlchemy 1.4+ deprecated
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+else:
+    # Default to local SQLite database in instance folder
+    os.makedirs(os.path.join(app.root_path, 'instance'), exist_ok=True)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///skin_scan.db'
 
-# Email Configuration (Gmail)
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USERNAME'] = 'hemanth.shg@gmail.com'  # Replace with your Gmail
-app.config['MAIL_PASSWORD'] = 'bxlkkhxeelmkkfgp'     # Replace with your app password
-app.config['MAIL_DEFAULT_SENDER'] = 'hemanth.shg@gmail.com'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+
+# Email Configuration
+app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS', 'True').lower() in ('true', '1', 't')
+app.config['MAIL_USE_SSL'] = os.environ.get('MAIL_USE_SSL', 'False').lower() in ('true', '1', 't')
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', '')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD', '')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER', os.environ.get('MAIL_USERNAME', 'noreply@skinscan.local'))
 
 db = SQLAlchemy(app)
 mail = Mail(app)
@@ -51,6 +66,9 @@ with app.app_context():
 
 # Email Functions
 def send_welcome_email(user_email, username):
+    if not app.config.get('MAIL_USERNAME') or not app.config.get('MAIL_PASSWORD'):
+        print("Info: Welcome email skipped (SMTP credentials not configured).")
+        return False
     try:
         msg = Message(
             subject='Welcome to Skin Scan! 🏥',
@@ -78,6 +96,9 @@ def send_welcome_email(user_email, username):
         return False
 
 def send_prediction_report(user_email, username, prediction_data):
+    if not app.config.get('MAIL_USERNAME') or not app.config.get('MAIL_PASSWORD'):
+        print("Info: Prediction report email skipped (SMTP credentials not configured).")
+        return False
     try:
         # Parse top predictions
         top_predictions = json.loads(prediction_data['top_predictions'])

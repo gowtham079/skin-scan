@@ -1,228 +1,97 @@
-# 🚀 Skin Scan Deployment Guide
+# 🚀 Skin Scan Deployment Guide (Render)
 
-This guide will help you deploy your Skin Scan application so it can be accessed from different systems and mobile devices via a public link.
+This guide provides step-by-step instructions for deploying your **Skin Scan** web application to **[Render](https://render.com)**.
 
-## 📋 Prerequisites
+---
 
-- Python 3.9+
-- Git
-- GitHub account (for most deployment options)
-- Email account for sending notifications
+## 📋 Highlights & Changes Made Before Deployment
 
-## 🎯 Quick Start Options
+1. **Security & Sensitive Data Removed:**
+   - Removed hardcoded Gmail credentials and secret keys from `app.py`.
+   - All configurations are loaded dynamically via environment variables (`os.environ.get()`) using `python-dotenv`.
+   - Untracked the local SQLite database (`instance/skin_scan.db`) to ensure user credentials and records are never committed to Git.
+   - Updated `.gitignore` to prevent sensitive files (`.env`, `instance/`, `*.db`) from being tracked.
+2. **Streamlined for Fast Production Builds:**
+   - Removed unnecessary Docker files (`Dockerfile`, `docker-compose.yml`) in favor of Render's native, lightweight Python environment.
+   - Cleaned up heavy offline ML training assets (120MB+ raw CSVs, Jupyter notebooks, ONNX models).
+   - Only the active TensorFlow.js browser model (`sc_detector/artifacts/tfjs/mobilen_model/`) is deployed, making deployments build in ~30 seconds.
+   - Pinned production dependencies with `gunicorn`, `python-dotenv`, and `psycopg2-binary`.
 
-### Option 1: Railway (Recommended - Easiest)
+---
 
-Railway offers a free tier and is perfect for Flask applications.
+## 🎯 Option 1: Deploy with Render Web Service (Recommended)
 
-**Steps:**
-1. Go to [railway.app](https://railway.app)
-2. Sign up with GitHub
-3. Click "New Project" → "Deploy from GitHub repo"
-4. Select your Skin Scan repository
-5. Add environment variables (see Environment Variables section)
-6. Deploy!
+### Step 1: Push Changes to GitHub
+Make sure all updated files are committed and pushed to your GitHub repository:
+```bash
+git add .
+git commit -m "Configure Skin Scan for Render deployment and secure sensitive data"
+git push origin master
+```
 
-**Your app will be available at:** `https://your-app-name.railway.app`
-
-### Option 2: Render (Free Tier Available)
-
-Render provides excellent free hosting for web applications.
-
-**Steps:**
-1. Go to [render.com](https://render.com)
-2. Sign up and connect GitHub
-3. Create "New Web Service"
-4. Connect your repository
-5. Configure:
+### Step 2: Create Web Service on Render
+1. Visit [dashboard.render.com](https://dashboard.render.com/) and log in.
+2. Click **New +** → **Web Service**.
+3. Connect your GitHub repository (`skin-scan`).
+4. Configure the service settings:
+   - **Name:** `skin-scan` (or your preferred name)
+   - **Region:** Choose closest to your users (e.g., Oregon, Frankfurt, Singapore)
+   - **Branch:** `master` (or `main`)
+   - **Runtime:** `Python 3`
    - **Build Command:** `pip install -r requirements.txt`
    - **Start Command:** `gunicorn app:app`
-   - **Environment:** Python 3
-6. Add environment variables
-7. Deploy!
+   - **Instance Type:** `Free`
 
-**Your app will be available at:** `https://your-app-name.onrender.com`
+### Step 3: Add Environment Variables
+Under the **Environment Variables** section in Render, add:
+| Key | Example Value | Description |
+|-----|---------------|-------------|
+| `FLASK_APP` | `app.py` | Main application entry point |
+| `FLASK_ENV` | `production` | Production mode |
+| `SECRET_KEY` | *(generate random 32-char string)* | Session signing key |
+| `PYTHON_VERSION` | `3.11.9` | Python runtime version |
+| `MAIL_SERVER` | `smtp.gmail.com` | (Optional) SMTP host |
+| `MAIL_PORT` | `587` | (Optional) SMTP port |
+| `MAIL_USE_TLS` | `True` | (Optional) Enable TLS |
+| `MAIL_USERNAME` | `your-email@gmail.com` | (Optional) Your email |
+| `MAIL_PASSWORD` | `your-app-password` | (Optional) 16-character Google App Password |
+| `MAIL_DEFAULT_SENDER` | `your-email@gmail.com` | (Optional) Sender email |
 
-### Option 3: Heroku (Paid Plans)
+> [!TIP]
+> **Email Notifications are Optional:** If `MAIL_USERNAME` or `MAIL_PASSWORD` are left blank, user registration and prediction logging will still work smoothly without crashing.
 
-**Steps:**
-1. Install Heroku CLI
-2. Login: `heroku login`
-3. Create app: `heroku create your-app-name`
-4. Set environment variables
-5. Deploy: `git push heroku main`
+### Step 4: Deploy
+Click **Create Web Service**. Render will install requirements and start your web server. Your app will be live at:
+`https://<your-service-name>.onrender.com`
 
-## 🔧 Environment Variables
+---
 
-Create a `.env` file or set these in your hosting platform:
+## 🎯 Option 2: 1-Click Blueprint Deployment (`render.yaml`)
+
+Because this repository includes a [`render.yaml`](file:///d:/All%20projects/skin-scan/render.yaml) blueprint:
+1. Go to [Render Blueprints](https://dashboard.render.com/blueprints).
+2. Click **New Blueprint Instance**.
+3. Select your `skin-scan` repository.
+4. Render will automatically read `render.yaml` and configure the build command, start command, and environment variables!
+5. Fill in any optional credentials (such as Gmail app password) and click **Apply**.
+
+---
+
+## 🗄️ Database Note for Render Free Tier
+
+- **SQLite (Default):** On Render's free tier, local file storage is ephemeral (restarts reset SQLite data).
+- **Persistent PostgreSQL (Recommended for production):**
+  1. On Render Dashboard, click **New +** → **PostgreSQL**.
+  2. Copy the **Internal Database URL**.
+  3. In your `skin-scan` Web Service settings, add an environment variable `DATABASE_URL` with that URL.
+  4. The application automatically detects PostgreSQL and initializes the tables!
+
+---
+
+## 🧪 Testing Locally Before Pushing
 
 ```bash
-# Flask Configuration
-FLASK_APP=app.py
-FLASK_ENV=production
-SECRET_KEY=your-super-secret-key-here
-
-# Email Configuration (Gmail)
-MAIL_SERVER=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USE_TLS=True
-MAIL_USERNAME=your-email@gmail.com
-MAIL_PASSWORD=your-app-password-here
-MAIL_DEFAULT_SENDER=your-email@gmail.com
-
-# Application Configuration
-HOST=0.0.0.0
-PORT=5000
-DEBUG=False
+# Run the application locally
+python app.py
 ```
-
-### Setting up Gmail App Password
-
-1. Enable 2-factor authentication on your Gmail account
-2. Go to Google Account settings
-3. Security → App passwords
-4. Generate a new app password
-5. Use this password in `MAIL_PASSWORD`
-
-## 🐳 Docker Deployment
-
-If you prefer containerized deployment:
-
-```bash
-# Build the image
-docker build -t skin-scan .
-
-# Run the container
-docker run -d -p 5000:5000 --name skin-scan-app skin-scan
-```
-
-## 🖥️ VPS Deployment (DigitalOcean, Linode, etc.)
-
-For full control over your server:
-
-### 1. Server Setup
-```bash
-# Update system
-sudo apt update && sudo apt upgrade -y
-
-# Install Python and dependencies
-sudo apt install python3 python3-pip nginx git -y
-
-# Install Python packages
-pip3 install -r requirements.txt
-```
-
-### 2. Application Setup
-```bash
-# Clone your repository
-git clone https://github.com/yourusername/skin-scan.git
-cd skin-scan
-
-# Set up environment variables
-cp env.example .env
-nano .env  # Edit with your values
-
-# Create systemd service
-sudo nano /etc/systemd/system/skin-scan.service
-```
-
-### 3. Systemd Service File
-```ini
-[Unit]
-Description=Skin Scan Flask App
-After=network.target
-
-[Service]
-User=www-data
-WorkingDirectory=/path/to/your/skin-scan
-Environment=PATH=/path/to/your/skin-scan/venv/bin
-ExecStart=/path/to/your/skin-scan/venv/bin/gunicorn --workers 3 --bind unix:skin-scan.sock -m 007 app:app
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-
-### 4. Nginx Configuration
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com;
-
-    location / {
-        include proxy_params;
-        proxy_pass http://unix:/path/to/your/skin-scan/skin-scan.sock;
-    }
-}
-```
-
-## 📱 Mobile Access
-
-Once deployed, your app will be accessible on:
-- **Desktop browsers:** Chrome, Firefox, Safari, Edge
-- **Mobile browsers:** All modern mobile browsers
-- **Tablets:** iPad, Android tablets
-
-The app is already mobile-responsive and will work great on all devices!
-
-## 🔒 Security Considerations
-
-1. **Change the secret key** in production
-2. **Use HTTPS** (most hosting platforms provide this automatically)
-3. **Set up proper email credentials**
-4. **Regular backups** of your database
-5. **Monitor usage** and set up alerts
-
-## 🚨 Troubleshooting
-
-### Common Issues:
-
-1. **App won't start:**
-   - Check environment variables
-   - Verify all dependencies are installed
-   - Check logs for error messages
-
-2. **Email not working:**
-   - Verify Gmail app password
-   - Check firewall settings
-   - Test SMTP connection
-
-3. **Database issues:**
-   - Ensure database file permissions
-   - Check disk space
-   - Verify SQLite installation
-
-### Getting Help:
-
-- Check your hosting platform's logs
-- Use the deployment scripts provided
-- Test locally first with `python app.py`
-
-## 📊 Monitoring
-
-Set up monitoring for:
-- Application uptime
-- Response times
-- Error rates
-- Database performance
-
-## 🎉 Success!
-
-Once deployed, you'll have:
-- ✅ Public URL accessible from anywhere
-- ✅ Mobile-friendly interface
-- ✅ AI-powered skin lesion detection
-- ✅ User authentication and data storage
-- ✅ Email notifications
-- ✅ Admin dashboard
-
-Your Skin Scan application will be live and accessible to users worldwide! 🌍
-
-## 🔗 Quick Links
-
-- [Railway](https://railway.app) - Recommended hosting
-- [Render](https://render.com) - Free tier available
-- [Heroku](https://heroku.com) - Popular platform
-- [DigitalOcean](https://digitalocean.com) - VPS hosting
-- [Gmail App Passwords](https://support.google.com/accounts/answer/185833) - Email setup
-
+Open [http://localhost:5000](http://localhost:5000) in your browser.

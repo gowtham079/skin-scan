@@ -1,15 +1,41 @@
-# Byte-compiled / optimized / DLL files
+# Environment variables and secrets
+.env
+.env.*
+*.env
+
+# SQLite and application instance data
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Python bytecode and caches
 __pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
 
-# Jupyter Notebook
-.ipynb_checkpoints
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
 
-.vscode
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store
+Thumbs.db
 
+# Offline training data, notebooks, and unused models
+/sc_detector/data/
+/sc_detector/notebooks/
+/sc_detector/scripts/
+/sc_detector/artifacts/ONNX/
+/sc_detector/artifacts/saved_model/
+/sc_detector/artifacts/*.h5
+/sc_detector/artifacts/tfjs/mn_model/
+/sc_detector/artifacts/tfjs/my_model/
 /Skin-Lesion-Analyzer
-
-/sc_detector/data/raw
-
-/sc_detector/data/base_dir
-
-/sc_detector/artifacts/mn_model.h5
