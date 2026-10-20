@@ -172,7 +172,9 @@ def register():
     if User.query.filter((User.username == username) | (User.email == email)).first():
         return jsonify({'success': False, 'error': 'Username or email already exists.'}), 400
     password_hash = generate_password_hash(password)
-    is_admin = data.get('is_admin', False)
+    # Automatically grant admin if explicitly passed, if first user in database, or matches admin email
+    admin_email = os.environ.get('MAIL_USERNAME', '').strip().lower()
+    is_admin = data.get('is_admin', False) or (User.query.count() == 0) or (admin_email and email.strip().lower() == admin_email)
     user = User(username=username, email=email, password_hash=password_hash, is_admin=is_admin)
     db.session.add(user)
     db.session.commit()
