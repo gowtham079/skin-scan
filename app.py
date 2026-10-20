@@ -6,6 +6,7 @@ from datetime import datetime
 import os
 import uuid
 import json
+import threading
 
 from dotenv import load_dotenv
 
@@ -46,7 +47,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     predictions = db.relationship('Prediction', backref='user', lazy=True)
@@ -60,105 +61,141 @@ class Prediction(db.Model):
     top_predictions = db.Column(db.Text, nullable=False)  # JSON string of top 3 predictions
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-# Create database tables
+def seed_admin_user():
+    admin_username = os.environ.get('ADMIN_USERNAME', 'Gowtham')
+    admin_email = os.environ.get('ADMIN_EMAIL', os.environ.get('MAIL_USERNAME', 'hemanth.shg@gmail.com'))
+    admin_password = os.environ.get('ADMIN_PASSWORD', 'gowtham1919')
+
+    # Look for existing user with this username or email
+    admin_user = User.query.filter(
+        (db.func.lower(User.username) == admin_username.lower()) |
+        (db.func.lower(User.email) == admin_email.lower())
+    ).first()
+
+    if not admin_user:
+        admin_user = User(
+            username=admin_username,
+            email=admin_email,
+            password_hash=generate_password_hash(admin_password),
+            is_admin=True
+        )
+        db.session.add(admin_user)
+        db.session.commit()
+        print(f"Created admin account: {admin_username} ({admin_email})")
+    else:
+        # Ensure credentials and admin status match requested admin
+        admin_user.username = admin_username
+        admin_user.email = admin_email
+        admin_user.password_hash = generate_password_hash(admin_password)
+        admin_user.is_admin = True
+        db.session.commit()
+        print(f"Configured admin account: {admin_username} ({admin_email})")
+
+# Create database tables and seed admin user
 with app.app_context():
     db.create_all()
+    try:
+        seed_admin_user()
+    except Exception as e:
+        print(f"Notice: Admin seed check: {e}")
 
 # Email Functions
 def send_welcome_email(user_email, username):
     if not app.config.get('MAIL_USERNAME') or not app.config.get('MAIL_PASSWORD'):
         print("Info: Welcome email skipped (SMTP credentials not configured).")
         return False
-    try:
-        msg = Message(
-            subject='Welcome to Skin Scan! 🏥',
-            recipients=[user_email],
-            html=f'''
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #667eea;">Welcome to Skin Scan, {username}! 👋</h2>
-                <p>Thank you for visiting our AI-powered skin lesion detection platform.</p>
-                <p>With Skin Scan, you can:</p>
-                <ul>
-                    <li>🔍 Analyze skin lesions with AI</li>
-                    <li>📊 Get detailed prediction reports</li>
-                    <li>📈 Track your scan history</li>
-                    <li>🛡️ Ensure your privacy with local processing</li>
-                </ul>
-                <p>Your health is our priority. Stay safe and healthy!</p>
-                <p>Best regards,<br>The Skin Scan Team</p>
-            </div>
-            '''
-        )
-        mail.send(msg)
-        return True
-    except Exception as e:
-        print(f"Email error: {e}")
-        return False
+    with app.app_context():
+        try:
+            msg = Message(
+                subject='Welcome to Skin Scan! 🏥',
+                recipients=[user_email],
+                html=f'''
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #667eea;">Welcome to Skin Scan, {username}! 👋</h2>
+                    <p>Thank you for visiting our AI-powered skin lesion detection platform.</p>
+                    <p>With Skin Scan, you can:</p>
+                    <ul>
+                        <li>🔍 Analyze skin lesions with AI</li>
+                        <li>📊 Get detailed prediction reports</li>
+                        <li>📈 Track your scan history</li>
+                        <li>🛡️ Ensure your privacy with local processing</li>
+                    </ul>
+                    <p>Your health is our priority. Stay safe and healthy!</p>
+                    <p>Best regards,<br>The Skin Scan Team</p>
+                </div>
+                '''
+            )
+            mail.send(msg)
+            return True
+        except Exception as e:
+            print(f"Email error: {e}")
+            return False
 
 def send_prediction_report(user_email, username, prediction_data):
     if not app.config.get('MAIL_USERNAME') or not app.config.get('MAIL_PASSWORD'):
         print("Info: Prediction report email skipped (SMTP credentials not configured).")
         return False
-    try:
-        # Parse top predictions
-        top_predictions = json.loads(prediction_data['top_predictions'])
-        
-        # Create prediction details HTML
-        predictions_html = ""
-        for i, pred in enumerate(top_predictions[:3]):
-            confidence = (pred['probability'] * 100)
-            predictions_html += f'''
-            <tr>
-                <td>{i+1}</td>
-                <td>{pred['className']}</td>
-                <td>{confidence:.1f}%</td>
-            </tr>
-            '''
-        
-        msg = Message(
-            subject=f'Skin Scan Report - {prediction_data["predicted_class"]}',
-            recipients=[user_email],
-            html=f'''
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #667eea;">Skin Scan Report 📋</h2>
-                <p>Hello {username},</p>
-                <p>Here's your skin lesion analysis report:</p>
-                
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
-                    <h3 style="color: #333;">Primary Prediction</h3>
-                    <p><strong>Condition:</strong> {prediction_data["predicted_class"]}</p>
-                    <p><strong>Confidence:</strong> {(prediction_data["confidence_score"] * 100):.1f}%</p>
-                    <p><strong>Scan Time:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+    with app.app_context():
+        try:
+            # Parse top predictions
+            top_predictions = json.loads(prediction_data['top_predictions'])
+            
+            # Create prediction details HTML
+            predictions_html = ""
+            for i, pred in enumerate(top_predictions[:3]):
+                confidence = (pred['probability'] * 100)
+                predictions_html += f'''
+                <tr>
+                    <td>{i+1}</td>
+                    <td>{pred['className']}</td>
+                    <td>{confidence:.1f}%</td>
+                </tr>
+                '''
+            
+            msg = Message(
+                subject=f'Skin Scan Report - {prediction_data["predicted_class"]}',
+                recipients=[user_email],
+                html=f'''
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #667eea;">Skin Scan Report 📋</h2>
+                    <p>Hello {username},</p>
+                    <p>Here's your skin lesion analysis report:</p>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                        <h3 style="color: #333;">Primary Prediction</h3>
+                        <p><strong>Condition:</strong> {prediction_data["predicted_class"]}</p>
+                        <p><strong>Confidence:</strong> {(prediction_data["confidence_score"] * 100):.1f}%</p>
+                        <p><strong>Scan Time:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+                    </div>
+                    
+                    <h3>Top 3 Predictions</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <thead>
+                            <tr style="background: #667eea; color: white;">
+                                <th style="padding: 10px; text-align: left;">Rank</th>
+                                <th style="padding: 10px; text-align: left;">Condition</th>
+                                <th style="padding: 10px; text-align: left;">Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {predictions_html}
+                        </tbody>
+                    </table>
+                    
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                        <p><strong>⚠️ Important:</strong> This is an AI-assisted analysis. Please consult with a healthcare professional for medical advice.</p>
+                    </div>
+                    
+                    <p>Thank you for using Skin Scan!</p>
+                    <p>Best regards,<br>The Skin Scan Team</p>
                 </div>
-                
-                <h3>Top 3 Predictions</h3>
-                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-                    <thead>
-                        <tr style="background: #667eea; color: white;">
-                            <th style="padding: 10px; text-align: left;">Rank</th>
-                            <th style="padding: 10px; text-align: left;">Condition</th>
-                            <th style="padding: 10px; text-align: left;">Confidence</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {predictions_html}
-                    </tbody>
-                </table>
-                
-                <div style="background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                    <p><strong>⚠️ Important:</strong> This is an AI-assisted analysis. Please consult with a healthcare professional for medical advice.</p>
-                </div>
-                
-                <p>Thank you for using Skin Scan!</p>
-                <p>Best regards,<br>The Skin Scan Team</p>
-            </div>
-            '''
-        )
-        mail.send(msg)
-        return True
-    except Exception as e:
-        print(f"Email error: {e}")
-        return False
+                '''
+            )
+            mail.send(msg)
+            return True
+        except Exception as e:
+            print(f"Email error: {e}")
+            return False
 
 # --- User Authentication Routes ---
 @app.route('/api/register', methods=['POST'])
@@ -182,20 +219,28 @@ def register():
 
 @app.route('/api/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    username_or_email = data.get('username')
-    password = data.get('password')
-    user = User.query.filter((User.username == username_or_email) | (User.email == username_or_email)).first()
+    data = request.get_json() or {}
+    username_or_email = (data.get('username') or '').strip()
+    password = data.get('password') or ''
+    if not username_or_email or not password:
+        return jsonify({'success': False, 'error': 'Username and password are required.'}), 400
+
+    user = User.query.filter(
+        (db.func.lower(User.username) == username_or_email.lower()) |
+        (db.func.lower(User.email) == username_or_email.lower())
+    ).first()
+
     if not user or not check_password_hash(user.password_hash, password):
         return jsonify({'success': False, 'error': 'Invalid username/email or password.'}), 401
+
     session['user_id'] = user.id
     session['username'] = user.username
     session['is_admin'] = user.is_admin
     session['email'] = user.email
-    
-    # Send welcome email
-    send_welcome_email(user.email, user.username)
-    
+
+    # Send welcome email in background thread so login is instant and never hangs
+    threading.Thread(target=send_welcome_email, args=(user.email, user.username), daemon=True).start()
+
     return jsonify({'success': True, 'message': 'Login successful.', 'is_admin': user.is_admin, 'username': user.username, 'email': user.email})
 
 @app.route('/api/logout', methods=['POST'])
@@ -275,8 +320,8 @@ def save_prediction():
         db.session.add(prediction)
         db.session.commit()
         
-        # Send prediction report email
-        send_prediction_report(session['email'], session['username'], data)
+        # Send prediction report email in background thread so UI returns immediately
+        threading.Thread(target=send_prediction_report, args=(session['email'], session['username'], data), daemon=True).start()
         
         return jsonify({
             'success': True,
