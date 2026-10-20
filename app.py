@@ -212,6 +212,12 @@ def get_user():
         'email': session.get('email')
     })
 
+# --- Health Check Route ---
+@app.route('/healthz')
+@app.route('/api/health')
+def health_check():
+    return jsonify({'status': 'healthy', 'time': datetime.utcnow().isoformat()}), 200
+
 # --- Main and Static Routes ---
 @app.route('/')
 def index():
