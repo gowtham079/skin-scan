@@ -75,12 +75,23 @@
   on("click", ".scrollto", function (e) {
     if (select(this.hash)) {
       e.preventDefault();
+      let navbarCollapse = document.getElementById("navbarResponsive");
+      if (navbarCollapse && navbarCollapse.classList.contains("show") && window.bootstrap) {
+        let bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+        if (bsCollapse) {
+          bsCollapse.hide();
+        } else {
+          new bootstrap.Collapse(navbarCollapse).hide();
+        }
+      }
       let navbar = select("#navbar");
-      if (navbar.classList.contains("navbar-mobile")) {
+      if (navbar && navbar.classList.contains("navbar-mobile")) {
         navbar.classList.remove("navbar-mobile");
         let navbarToggle = select(".mobile-nav-toggle");
-        navbarToggle.classList.toggle("bi-list");
-        navbarToggle.classList.toggle("bi-x");
+        if (navbarToggle) {
+          navbarToggle.classList.toggle("bi-list");
+          navbarToggle.classList.toggle("bi-x");
+        }
       }
       scrollto(this.hash);
     }

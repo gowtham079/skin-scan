@@ -183,15 +183,15 @@ async function predButton() {
     
     infoHtml = `
       <div style="border:2px solid ${severityBorder}; background:${severityColor}; padding:15px; border-radius:10px; margin-top:15px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-        <h4 style="color:#333; margin-bottom:15px;">📋 Detailed Information</h4>
+        <h4 style="color:#333; margin-bottom:15px; font-size: clamp(1.1rem, 2.5vw, 1.4rem);">📋 Detailed Information</h4>
         
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
-          <div>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
             <p><strong>🔍 Symptoms:</strong> ${info.symptoms}</p>
             <p><strong>⚠️ Severity:</strong> ${info.severity}</p>
             <p><strong>🎯 Risk Factors:</strong> ${info.risk_factors}</p>
           </div>
-          <div>
+          <div class="col-12 col-md-6">
             <p><strong>💊 Treatment:</strong> ${info.cure}</p>
             <p><strong>🛡️ Prevention:</strong> ${info.prevention}</p>
             <p><strong>📌 Causes:</strong> ${info.cause}</p>
@@ -200,7 +200,7 @@ async function predButton() {
         
         <div style="margin-top:15px; padding:10px; background:white; border-radius:5px; border-left:4px solid #2196f3;">
           <p style="margin:0; font-weight:bold; color:#2196f3;">⚠️ Important:</p>
-          <p style="margin:5px 0 0 0; font-size:14px;">This is an AI-assisted analysis. Please consult with a healthcare professional for medical advice and proper diagnosis.</p>
+          <p style="margin:5px 0 0 0; font-size:14px; color:#333;">This is an AI-assisted analysis. Please consult with a healthcare professional for medical advice and proper diagnosis.</p>
         </div>
       </div>
     `;

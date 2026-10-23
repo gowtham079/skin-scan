@@ -10,34 +10,43 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container d-flex align-items-center justify-content-between">
             <a class="navbar-brand" href="/">SKIN SCAN</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/">← BACK TO SCANNER</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashNavbar" aria-controls="dashNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="dashNavbar">
+                <div class="navbar-nav ms-auto align-items-lg-center">
+                    <a class="nav-link" href="/">SCANNER</a>
+                    <a class="nav-link active" href="/dashboard">DASHBOARD</a>
+                    <a class="nav-link" href="/diseases">DISEASE INFO</a>
+                    <a class="nav-link" href="/admin" id="admin-link" style="display:none;">ADMIN PANEL</a>
+                    <button class="btn btn-outline-danger btn-sm ms-lg-2 mt-2 mt-lg-0" id="logout-btn" style="display:none;" onclick="logoutUser()">LOGOUT</button>
+                </div>
             </div>
         </div>
     </nav>
 
     <div class="container mt-4 mb-5">
-        <h1 class="dashboard-title text-center">SKIN SCAN ANALYTICS DASHBOARD</h1>
+        <h1 class="dashboard-title text-center mb-4">SKIN SCAN ANALYTICS DASHBOARD</h1>
         
         <!-- Statistics Cards -->
-        <div class="row mb-4">
-            <div class="col-md-4 col-12 mb-3 mb-md-0">
-                <div class="stats-card text-center">
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="stats-card text-center h-100">
                     <h3 id="total-predictions">0</h3>
                     <p class="mb-0">TOTAL PREDICTIONS</p>
                 </div>
             </div>
-            <div class="col-md-4 col-12 mb-3 mb-md-0">
-                <div class="stats-card text-center">
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="stats-card text-center h-100">
                     <h3 id="recent-predictions">0</h3>
                     <p class="mb-0">RECENT (7 DAYS)</p>
                 </div>
             </div>
-            <div class="col-md-4 col-12">
-                <div class="stats-card text-center">
+            <div class="col-12 col-sm-12 col-lg-4">
+                <div class="stats-card text-center h-100">
                     <h3 id="avg-confidence">0%</h3>
                     <p class="mb-0">AVG CONFIDENCE</p>
                 </div>
@@ -275,12 +284,37 @@
             }
         }
 
+        // Check user session
+        function checkUserNav() {
+            fetch('/api/user')
+                .then(res => res.json())
+                .then(data => {
+                    const adminLink = document.getElementById('admin-link');
+                    const logoutBtn = document.getElementById('logout-btn');
+                    if (data.logged_in) {
+                        if (logoutBtn) logoutBtn.style.display = '';
+                        if (adminLink && data.is_admin) adminLink.style.display = '';
+                    }
+                })
+                .catch(() => {});
+        }
+
+        function logoutUser() {
+            fetch('/api/logout', { method: 'POST' })
+                .then(res => res.json())
+                .then(() => {
+                    window.location.href = '/';
+                });
+        }
+
         // Load data when page loads
         document.addEventListener('DOMContentLoaded', async function() {
             // Always allow viewing the dashboard. APIs will handle auth and we show messages accordingly.
+            checkUserNav();
             loadStats();
             loadPredictions();
         });
     </script>
+    <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html> 

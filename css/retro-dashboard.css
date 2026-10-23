@@ -15,21 +15,13 @@ body {
     font-family: 'Orbitron', monospace;
     color: #2c2c2c;
     line-height: 1.6;
-    /* Prevent layout shifts */
+    min-height: 100vh;
     overflow-x: hidden;
-    overflow-y: auto;
-    height: 100vh;
-    max-height: 100vh;
 }
 
 /* Retro container styling */
 .container {
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    max-height: calc(100vh - 100px);
 }
 
 /* Retro navbar */
@@ -37,30 +29,82 @@ body {
     background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%) !important;
     border-bottom: 3px solid #ffd700;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    padding: 0.75rem 0 !important;
+    position: relative;
+    z-index: 1030;
 }
 
 .navbar-brand {
     font-family: 'Press Start 2P', cursive;
-    font-size: 1.2rem;
+    font-size: clamp(0.9rem, 2.5vw, 1.25rem);
     color: #ffd700 !important;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* Custom retro styling for Bootstrap Navbar Toggler */
+.navbar-toggler {
+    border: 2px solid #ffd700 !important;
+    background: rgba(255, 215, 0, 0.12) !important;
+    padding: 0.4rem 0.65rem !important;
+    border-radius: 8px !important;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.25) !important;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6) !important;
+    outline: none !important;
+}
+
+.navbar-toggler-icon {
+    filter: invert(85%) sepia(80%) saturate(1000%) hue-rotate(5deg) brightness(105%) contrast(105%);
+}
+
+.navbar-nav {
+    gap: 0.35rem;
+}
+
+@media (min-width: 992px) {
+    .navbar-nav {
+        margin-left: auto;
+        gap: 0.75rem;
+    }
 }
 
 .navbar-nav .nav-link {
     font-family: 'VT323', monospace;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: #ffffff !important;
     text-transform: uppercase;
     letter-spacing: 1px;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
     border-bottom: 2px solid transparent;
+    padding: 0.5rem 0.85rem;
 }
 
-.navbar-nav .nav-link:hover {
+.navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
     color: #ffd700 !important;
     border-bottom-color: #ffd700;
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background: #1e1e1e !important;
+        border: 2px solid #ffd700 !important;
+        border-radius: 12px !important;
+        padding: 1.25rem !important;
+        margin-top: 0.75rem !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+    }
+    
+    .navbar-nav .nav-link {
+        border-bottom: 1px solid rgba(255, 215, 0, 0.15) !important;
+        padding: 0.6rem 0.5rem !important;
+        width: 100%;
+    }
 }
 
 /* Retro header styling */
@@ -572,57 +616,52 @@ body {
 }
 
 /* Retro responsive design */
-@media (max-width: 768px) {
+@media (max-width: 991.98px) {
     .dashboard-title {
-        font-size: 1.8rem;
+        font-size: clamp(1.4rem, 4vw, 2.2rem);
         letter-spacing: 2px;
     }
     
     .stats-card {
-        padding: 1.5rem;
+        padding: 1.5rem 1rem;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .dashboard-title {
+        font-size: clamp(1.2rem, 3.8vw, 1.8rem);
+        letter-spacing: 1px;
+    }
+    
+    .stats-card {
+        padding: 1.25rem 0.85rem;
         margin-bottom: 1rem;
     }
     
     .stats-card h3 {
-        font-size: 2rem;
+        font-size: clamp(1.6rem, 5vw, 2.2rem);
     }
     
     .admin-header h1 {
-        font-size: 1.5rem;
-        letter-spacing: 2px;
+        font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+        letter-spacing: 1px;
     }
     
     .table-container {
-        padding: 1rem;
+        padding: 0.85rem;
+        border-radius: 12px;
     }
     
     .btn {
         font-size: 0.9rem;
-        padding: 0.5rem 1rem;
+        padding: 0.45rem 0.85rem;
     }
     
     .chart-container {
+        position: relative;
+        width: 100%;
         height: 280px;
-        max-height: 280px;
-        min-height: 280px;
-    }
-    
-    .chart-container canvas {
-        height: 240px !important;
-        max-height: 240px !important;
-        min-height: 240px !important;
-    }
-    
-    .container {
-        max-height: calc(100vh - 80px);
-    }
-    
-    .tab-content {
-        max-height: 400px;
-    }
-    
-    .tab-pane {
-        max-height: 400px;
     }
 }
 
